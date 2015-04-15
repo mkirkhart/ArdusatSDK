@@ -16,6 +16,8 @@ SdVolume vol;
 #define _output_buffer vol.cacheAddress()->output_buf
 int _output_buf_len = 0;
 
+bool ARDUSAT_SHIELD = false;
+
 prog_char begin_error_msg[] = "Uh oh, begin%s failed. Check your wiring!";
 prog_char orientation_sensor_name[] = "Orientation";
 prog_char accel_sensor_name[] = "Acceleration";
@@ -184,7 +186,7 @@ boolean beginUVLightSensor() {
 #endif
 }
 
-void readUVLight(uvlight_t * output) {
+void readUVLight(uvlight_t * output, int pin) {
   if (output == NULL)
     return;
 
@@ -200,7 +202,7 @@ void readUVLight(uvlight_t * output) {
   output->uvindex = si1145_getUVIndex();
 #else
   output->header.sensor_id = SENSORID_ML8511;
-  output->uvindex = ml8511_getUV();
+  output->uvindex = ml8511_getUV(pin);
 #endif
 }
 
