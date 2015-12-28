@@ -27,7 +27,8 @@ typedef enum {
 	SENSORID_ADAFRUIT9DOFIMU = 0x04,
 	SENSORID_SI1145	= 0x05,
 	SENSORID_ML8511	= 0x06,
-	SENSORID_BMP180 = 0x07
+	SENSORID_BMP180 = 0x07,
+	SENSORID_ISL29125 = 0x08
 } sensor_id_t;
 
 /**
@@ -102,6 +103,11 @@ typedef struct {
 	float pressure;
 } pressure_t;
 
+typedef struct {
+	_data_header_t header;
+	float red, green, blue;
+} rgblight_t;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -144,6 +150,9 @@ void readGyro(gyro_t & orient);
 boolean beginMagneticSensor();
 void readMagnetic(magnetic_t & mag);
 
+boolean beginRGBLightSensor();
+void readRGBLight(rgblight_t & rgblight);
+
 boolean beginBarometricPressureSensor();
 void readBarometricPressure(pressure_t & pressure);
 
@@ -163,6 +172,7 @@ const char * temperatureToCSV(const char *sensorName, temperature_t & input);
 const char * luminosityToCSV(const char *sensorName, luminosity_t & input);
 const char * uvlightToCSV(const char *sensorName, uvlight_t & input);
 const char * orientationToCSV(const char *sensorName, orientation_t & input);
+const char * rgblightToCSV(const char *sensorName, rgblight_t & input );
 const char * pressureToCSV(const char *sensorName, pressure_t & pressure);
 
 /**
@@ -180,6 +190,7 @@ const char * gyroToJSON(const char *sensorName, gyro_t & input);
 const char * luminosityToJSON(const char *sensorName, luminosity_t & input);
 const char * uvlightToJSON(const char *sensorName, uvlight_t & input);
 const char * orientationToJSON(const char *sensorName, orientation_t & input);
+const char * rgblightToJSON(const char *sensorName, rgblight_t & input);
 const char * pressureToJSON(const char *sensorName, pressure_t & input);
 
 #ifdef __cplusplus
@@ -194,7 +205,8 @@ const char * temperatureToCSV( temperature_t & input );
 const char * luminosityToCSV( luminosity_t & input );
 const char * uvlightToCSV( uvlight_t & input );
 const char * orientationToCSV( orientation_t & input );
-const char * pressureToCSV( pressure_t & pressure );
+const char * rgblightToCSV( rgblight_t & input );
+const char * pressureToCSV( pressure_t & input );
 
 
 #endif /* ARDUSATSDK_H_ */

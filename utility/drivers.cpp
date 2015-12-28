@@ -891,3 +891,19 @@ float tsl2561_getLux() {
   tsl2561->getLuminosity(&broadband, &ir);
   return tsl2561->calculateLux(broadband, ir);
 }
+
+
+/*
+ * ISL29125 RGB Light Sensor
+ */
+SFE_ISL29125 sfe_isl29125;
+
+boolean isl29125_init() {
+  return sfe_isl29125.init();
+}
+
+void isl29125_getRGB(float *red, float *green, float *blue) {
+  *red = sfe_isl29125.readRed();
+  *green = sfe_isl29125.readGreen();
+  *blue = sfe_isl29125.readBlue();
+}

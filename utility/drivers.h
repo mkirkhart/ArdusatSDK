@@ -22,6 +22,7 @@
 #include <utility/Adafruit_L3GD20_U.h>
 #include <utility/Adafruit_SI1145.h>
 #include <utility/BMP180.h>
+#include <utility/SparkFunISL29125.h>
 #include <utility/TSL2561.h>
 #include <utility/pololu_LSM303.h>
 
@@ -33,8 +34,9 @@
 #define DRIVER_SI1145_ADDR		          0x60
 #define DRIVER_BMP180_ADDR              0x77
 #define DRIVER_LSM303_DTR_ADDR          0x1E
-#define DRIVER_ML8511_UV_PIN            A0
-#define DRIVER_ML8511_REF_PIN           A1
+#define DRIVER_ML8511_UV_PIN            0xA0
+#define DRIVER_ML8511_REF_PIN           0xA1
+#define DRIVER_ISL29125_ADDR            0x44  // RGB
 
 /* Constants */
 #define SENSORS_GRAVITY_EARTH             (9.80665F)              /**< Earth's gravity in m/s^2 */
@@ -159,6 +161,14 @@ float tmp102_getTempCelsius();
  */
 boolean tsl2561_init();
 float tsl2561_getLux();
+
+/**
+ * ISL29125 RGB Sensor
+ *
+ * http://www.sparkfun.com/products/12829
+ */
+boolean isl29125_init();
+void isl29125_getRGB(float * red, float * green, float * blue);
 
 #ifdef __cplusplus
 } // extern "C"

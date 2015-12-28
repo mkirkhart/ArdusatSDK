@@ -23,6 +23,7 @@ const char luminosity_sensor_name[] PROGMEM = "Luminosity";
 const char temperature_sensor_name[] PROGMEM = "Temperature";
 const char ir_temperature_sensor_name[] PROGMEM = "IRTemperature";
 const char pressure_sensor_name[] PROGMEM = "BarometricPressure";
+const char rgblight_sensor_name[] PROGMEM = "RGBLight";
 
 static char CSV_SEPARATOR = ',';
 static char JSON_PREFIX = '~';
@@ -238,6 +239,26 @@ void readGyro(gyro_t & output) {
 
   output.header.sensor_id = SENSORID_ADAFRUIT9DOFIMU;
   l3gd20h_getOrientation(&(output.x), &(output.y), &(output.z));
+}
+
+/*
+ * RGB Light
+ */
+boolean beginRGBLightSensor() {
+  // TODO: Support advance sensor configuration:
+  //       https://github.com/sparkfun/ISL29125_Breakout/blob/V_H1.0_L1.0.1/Libraries/
+  //               Arduino/examples/ISL29125Interrupts/ISL29125Interrupts.ino
+  return start_sensor_or_err(rgblight_sensor_name, isl29125_init);
+}
+
+void readRGBLight(rgblight_t & output) {
+  output.header.unit = DATA_UNIT_LUX;
+  output.header.timestamp = millis();
+  output.header.sensor_id = SENSORID_ISL29125;
+
+  // TODO: Adjust for relative luminance?
+  //       Y = 0.2126 * R + 0.7152 * G + 0.0722 * B
+  isl29125_getRGB(&(output.red), &(output.green), &(output.blue));
 }
 
 /*
@@ -579,6 +600,26 @@ const char * orientationToCSV(const char *sensorName, orientation_t & input) {
   return _getOutBuf();
 }
 
+_DEFAULT_SENSOR_NAME_TO_CSV_FXN(rgblight)
+const char * rgblightToCSV(const char *sensorName, rgblight_t & input) {
+  _headerToCSV(&(input.header), sensorName);
+
+  dtostrf(input.red, 2, 3, _getOutBuf() + _output_buf_len);
+  _output_buf_len = strlen(_getOutBuf());
+  _getOutBuf()[_output_buf_len++] = CSV_SEPARATOR;
+
+  dtostrf(input.green, 2, 3, _getOutBuf() + _output_buf_len);
+  _output_buf_len = strlen(_getOutBuf());
+  _getOutBuf()[_output_buf_len++] = CSV_SEPARATOR;
+
+  dtostrf(input.blue, 2, 3, _getOutBuf() + _output_buf_len);
+  _output_buf_len = strlen(_getOutBuf());
+
+  _add_checksum_to_csv_buffer(sensorName, 3, input.red, input.green, input.blue);
+  _getOutBuf()[_output_buf_len++] = '\n';
+  return _getOutBuf();
+}
+
 _DEFAULT_SENSOR_NAME_TO_CSV_FXN(pressure)
 const char * pressureToCSV(const char *sensorName, pressure_t & input) {
   _headerToCSV(&(input.header), sensorName);
@@ -710,9 +751,27 @@ const char * orientationToJSON(const char *sensor_name, orientation_t & orient)
   return _getOutBuf();
 }
 
-const char * pressureToJSON(const char *sensorName, pressure_t & pressure)
+const char * rgblightToJSON(const char *sensor_name, rgblight_t & rgblight)
+{
+  int nameLength = strlen(sensor_name);
+  char nameBuf[nameLength + 6];
+  _resetOutBuf();
+
+  sprintf(nameBuf, "%sRed", sensor_name);
+  _writeJSONValue(_getOutBuf(), nameBuf,
+      unit_to_str(rgblight.header.unit), rgblight.red);
+  sprintf(nameBuf, "%sGreen", sensor_name);
+  _writeJSONValue(&_getOutBuf()[_output_buf_len], nameBuf,
+		  unit_to_str(rgblight.header.unit), rgblight.green);
+  sprintf(nameBuf, "%sBlue", sensor_name);
+  _writeJSONValue(&_getOutBuf()[_output_buf_len], nameBuf,
+		  unit_to_str(rgblight.header.unit), rgblight.blue);
+  return _getOutBuf();
+}
+
+const char * pressureToJSON(const char *sensor_name, pressure_t & pressure)
 {
   _resetOutBuf();
-  _writeJSONValue(_getOutBuf(), sensorName, unit_to_str(pressure.header.unit), pressure.pressure);
+  _writeJSONValue(_getOutBuf(), sensor_name, unit_to_str(pressure.header.unit), pressure.pressure);
   return _getOutBuf();
 }
