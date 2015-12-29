@@ -896,14 +896,33 @@ float tsl2561_getLux() {
 /*
  * ISL29125 RGB Light Sensor
  */
-SFE_ISL29125 sfe_isl29125;
+SFE_ISL29125 isl29125;
 
 boolean isl29125_init() {
-  return sfe_isl29125.init();
+  return isl29125.init();
 }
 
 void isl29125_getRGB(float *red, float *green, float *blue) {
-  *red = sfe_isl29125.readRed();
-  *green = sfe_isl29125.readGreen();
-  *blue = sfe_isl29125.readBlue();
+  *red = isl29125.readRed();
+  *green = isl29125.readGreen();
+  *blue = isl29125.readBlue();
+}
+
+
+/*
+ * TCS34725 RGB Light Sensor
+ */
+Adafruit_TCS34725 tcs34725 = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_700MS, TCS34725_GAIN_1X);
+
+boolean tcs34725_init() {
+  return tcs34725.begin();
+}
+
+void tcs34725_getRGB(float *red, float *green, float *blue) {
+  uint16_t r, g, b, clear;
+
+  tcs34725.getRawData(&r, &g, &b, &clear);
+  *red = r;
+  *green = g;
+  *blue = b;
 }

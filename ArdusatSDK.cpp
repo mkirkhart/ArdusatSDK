@@ -245,20 +245,32 @@ void readGyro(gyro_t & output) {
  * RGB Light
  */
 boolean beginRGBLightSensor() {
+#if defined(ISL29125_RGB_LIGHT)
   // TODO: Support advance sensor configuration:
   //       https://github.com/sparkfun/ISL29125_Breakout/blob/V_H1.0_L1.0.1/Libraries/
   //               Arduino/examples/ISL29125Interrupts/ISL29125Interrupts.ino
   return start_sensor_or_err(rgblight_sensor_name, isl29125_init);
+#else
+  // TODO: Support advance sensor configuration:
+  //       https://learn.adafruit.com/adafruit-color-sensors/program-it
+  return start_sensor_or_err(rgblight_sensor_name, tcs34725_init);
+#endif
 }
 
 void readRGBLight(rgblight_t & output) {
   output.header.unit = DATA_UNIT_LUX;
   output.header.timestamp = millis();
-  output.header.sensor_id = SENSORID_ISL29125;
 
-  // TODO: Adjust for relative luminance?
+  // TODO: Adjust RGB for relative luminance?
   //       Y = 0.2126 * R + 0.7152 * G + 0.0722 * B
+
+#if defined(ISL29125_RGB_LIGHT)
+  output.header.sensor_id = SENSORID_ISL29125;
   isl29125_getRGB(&(output.red), &(output.green), &(output.blue));
+#else
+  output.header.sensor_id = SENSORID_TCS34725;
+  tcs34725_getRGB(&(output.red), &(output.green), &(output.blue));
+#endif
 }
 
 /*
