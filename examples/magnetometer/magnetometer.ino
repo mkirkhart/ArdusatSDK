@@ -1,9 +1,9 @@
 /*
  * =====================================================================================
  *
- *       Filename:  acceleration.ino
+ *       Filename:  magnetometer.ino
  *
- *    Description:  Outputs the acceleration sensor readings in a JSON format that
+ *    Description:  Outputs the magnetometer readings in a JSON format that
  *                  can be read by the Ardusat Experiment Platform
  *                  (http://experiments.ardusat.com).
  *
@@ -14,7 +14,7 @@
  *                  http://www.apache.org/licenses/LICENSE-2.0
  *
  *        Version:  1.0
- *        Created:  10/29/2014
+ *        Created:  05/29/2015
  *       Revision:  none
  *       Compiler:  Arduino
  *
@@ -43,7 +43,7 @@ ArdusatSerial serialConnection(SERIAL_MODE_HARDWARE_AND_SOFTWARE, 8, 9);
 /*-----------------------------------------------------------------------------
  *  Constant Definitions
  *-----------------------------------------------------------------------------*/
-acceleration_t accel;
+magnetic_t mag;
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -57,7 +57,7 @@ void setup(void)
 {
   serialConnection.begin(9600);
 
-  if (!beginAccelerationSensor()) {
+  if (!beginMagneticSensor()) {
     serialConnection.println("Can't initialize IMU! Check your wiring.");
   }
 
@@ -76,8 +76,8 @@ void setup(void)
  */
 void loop(void)
 {
-  readAcceleration(accel);
-  serialConnection.println(accelerationToJSON("acceleration", accel));
+  readMagnetic(mag);
+  serialConnection.println(magneticToJSON("magnetic", mag));
 
   delay(1000);
 }

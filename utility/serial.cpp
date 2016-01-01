@@ -11,13 +11,13 @@
 #include <ArdusatSDK.h>
 #include "serial.h"
 
-prog_char no_software_params_err_msg[] = "Uh oh, you specified a software serial mode but didn't specify transmit/recieve pins! Halting program...";
-prog_char xbee_cmd_mode[] = "+++";
-prog_char xbee_cmd_ack[] = "OK";
-prog_char xbee_cmd_baud[] = "ATBD ";
-prog_char xbee_cmd_write[] = "ATWR";
-prog_char xbee_cmd_close[] = "ATCN";
-prog_char xbee_baud_success[] = "Set XBEE baud rate to ";
+const char no_software_params_err_msg[] PROGMEM = "Uh oh, you specified a software serial mode but didn't specify transmit/recieve pins! Halting program...";
+const char xbee_cmd_mode[] PROGMEM = "+++";
+const char xbee_cmd_ack[] PROGMEM = "OK";
+const char xbee_cmd_baud[] PROGMEM = "ATBD ";
+const char xbee_cmd_write[] PROGMEM = "ATWR";
+const char xbee_cmd_close[] PROGMEM = "ATCN";
+const char xbee_baud_success[] PROGMEM = "Set XBEE baud rate to ";
 
 #define send_to_serial(function) \
   if (_mode == SERIAL_MODE_HARDWARE || _mode == SERIAL_MODE_HARDWARE_AND_SOFTWARE) { \
@@ -49,8 +49,8 @@ ArdusatSerial::ArdusatSerial(serialMode mode)
 /**
  * Constructor with serial mode and connection params for software serial.
  */
-ArdusatSerial::ArdusatSerial(serialMode mode, uint8_t softwareReceivePin,
-                             uint8_t softwareTransmitPin, bool softwareInverseLogic)
+ArdusatSerial::ArdusatSerial(serialMode mode, unsigned char softwareReceivePin,
+                             unsigned char softwareTransmitPin, bool softwareInverseLogic)
 {
   if (mode == SERIAL_MODE_SOFTWARE || mode == SERIAL_MODE_HARDWARE_AND_SOFTWARE) {
     _soft_serial = new SoftwareSerial(softwareReceivePin, softwareTransmitPin,
@@ -117,7 +117,7 @@ void ArdusatSerial::flush()
   send_to_serial(flush())
 }
 
-size_t ArdusatSerial::write(uint8_t b) {
+size_t ArdusatSerial::write(unsigned char b) {
   size_t ret = 1;
 
   if (_soft_serial != NULL && 
@@ -191,7 +191,7 @@ int _enter_xbee_cmd_mode(SoftwareSerial *serial, unsigned long speed)
 void set_xbee_baud_rate(Stream *serial, unsigned long speed)
 {
   char buf [30];
-  uint8_t rate;
+  unsigned char rate;
 
   if (_enter_xbee_cmd_mode((SoftwareSerial *) serial, speed) == 0) {
     switch(speed) {
