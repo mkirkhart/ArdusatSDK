@@ -32,13 +32,13 @@
 #define DRIVER_TMP102_ADDR		          0x48 // 0x4B for lemsens
 #define DRIVER_LEMSENS_TMP102_1_ADDR		0x4B // (lemsens)
 #define DRIVER_MLX90614_ADDR	          0x5A
-#define DRIVER_SI1145_ADDR		          0x60
 #define DRIVER_BMP180_ADDR              0x77
 #define DRIVER_LSM303_DTR_ADDR          0x1E
 #define DRIVER_ML8511_UV_PIN            0xA0
 #define DRIVER_ML8511_REF_PIN           0xA1
 #define DRIVER_ISL29125_ADDR            0x44  // RGB
 #define DRIVER_TCS34725_ADDR            0x29  // RGB
+#define DRIVER_SI1132_ADDR              0x60  // UV
 
 /* Constants */
 #define SENSORS_GRAVITY_EARTH             (9.80665F)              /**< Earth's gravity in m/s^2 */
@@ -132,15 +132,6 @@ boolean ml8511_init();
 float ml8511_getUV(int pin);
 
 /**
- * SI1145 breakout board is a UV/Light sensor from Adafruit. It was included in earlier
- * versions of the SpaceKit and is still supported, though not enabled by default.
- *
- * https://learn.adafruit.com/adafruit-si1145-breakout-board-uv-ir-visible-sensor/overview
- */
-boolean si1145_init();
-float si1145_getUVIndex();
-
-/**
  * MLX90614 IR Thermometer for non-contact temperature sensing.
  *
  * https://www.sparkfun.com/products/9570
@@ -179,6 +170,15 @@ void isl29125_getRGB(float * red, float * green, float * blue);
  */
 boolean tcs34725_init();
 void tcs34725_getRGB(float * red, float * green, float * blue);
+
+/**
+ * SI1132 UV/Light sensor uses the SI1145 driver provided by Adafruit.
+ *
+ * https://www.silabs.com/Support%20Documents/TechnicalDocs/Si1132.pdf
+ * https://learn.adafruit.com/adafruit-si1145-breakout-board-uv-ir-visible-sensor/overview
+ */
+boolean si1132_init();
+float si1132_getUVIndex();
 
 #ifdef __cplusplus
 } // extern "C"

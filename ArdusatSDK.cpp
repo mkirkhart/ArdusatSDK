@@ -176,8 +176,8 @@ void readLuminosity(luminosity_t & output) {
  * UV Light
  */
 boolean beginUVLightSensor() {
-#if defined(SI1145_UV_LIGHT)
-  return start_sensor_or_err(uvlight_sensor_name, si1145_init);
+#if defined(SI1132_UV_LIGHT)
+  return start_sensor_or_err(uvlight_sensor_name, si1132_init);
 #else
   return start_sensor_or_err(uvlight_sensor_name, ml8511_init);
 #endif
@@ -187,9 +187,9 @@ void readUVLight(uvlight_t & output, int pin) {
   output.header.unit = DATA_UNIT_MILLIWATT_PER_CMSQUARED;
   output.header.timestamp = millis();
 
-#if defined(SI1145_UV_LIGHT)
-  output.header.sensor_id = SENSORID_SI1145;
-  output.uvindex = si1145_getUVIndex();
+#if defined(SI1132_UV_LIGHT)
+  output.header.sensor_id = SENSORID_SI1132;
+  output.uvindex = si1132_getUVIndex();
 #else
   output.header.sensor_id = SENSORID_ML8511;
   output.uvindex = ml8511_getUV(pin);

@@ -755,23 +755,6 @@ float ml8511_getUV(int pin)
 
 
 /*
- * SI1145 UV/Light
- */
-Adafruit_SI1145 si1145_uv = Adafruit_SI1145();
-
-boolean si1145_init() {
-  return si1145_uv.begin();
-}
-
-float si1145_getUVIndex() {
-  float UVindex = si1145_uv.readUV();
-
-  // the index is multiplied by 100 so to get the integer index, divide by 100
-  UVindex /= 100.0;
-  return (UVindex);
-}
-
-/*
  * MLX90614 IR Temperature
  */
 uint16_t _mlx90614_read16(uint8_t a) {
@@ -926,3 +909,22 @@ void tcs34725_getRGB(float *red, float *green, float *blue) {
   *green = g;
   *blue = b;
 }
+
+
+/*
+ * SI1132 UV Light Sensor
+ */
+Adafruit_SI1145 si1132_uv = Adafruit_SI1145();
+
+boolean si1132_init() {
+  return si1132_uv.begin();
+}
+
+float si1132_getUVIndex() {
+  float UVindex = si1132_uv.readUV();
+
+  // the index is multiplied by 100 so to get the integer index, divide by 100
+  UVindex /= 100.0;
+  return UVindex;
+}
+
