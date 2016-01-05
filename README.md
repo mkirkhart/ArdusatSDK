@@ -47,6 +47,7 @@ Function | Sensor | Config Arguments
 **beginOrientationSensor** | L3GD20 (9DOF breakout) | None
 **beginUVLightSensor** | ML8511 | None
 **beginBarometricPressureSensor** | BMP180 | None
+**beginRGBLightSensor** | TCS34725 | None
 
 `begin` functions return `true` on success or `false` on failure.
 
@@ -65,6 +66,7 @@ Read Function | Data Structure | Data Elements | Sensor
 `readGyro` | `orientation_t` | `x, y, z` | L3GD20 (10DOF breakout)
 `readUVLight` | `uvlight_t` | `uvindex` | ML8511
 `readBarometricPressure` | `pressure_t` | `pressure` | BMP180 (10DOF breakout)
+`readRGBLight` | `rgblight_t` | `red, green, blue` | TCS34725
 
 In addition to these `read` functions, a convenience function `calculateOrientation` is provided
 to calculate the 3-axis orientation from raw data from the accelerometer and magnetometer. This 
@@ -151,6 +153,7 @@ Function | Arguments
 **temperatureToJSON** | `const char *sensor_name, temperature_t temp_data`
 **luminosityToJSON** | `const char *sensor_name, luminosity_t luminosity_data`
 **uvlightToJSON** | `const char *sensor_name, uvlight_t uvlight_data`
+**rgblightToJSON** | `const char *sensor_name, rgblight_t rgblight_data`
 
 Example:
 ```
@@ -172,6 +175,7 @@ Function | Arguments
 **temperatureToCSV** | `const char *sensor_name, temperature_t temp_data`
 **luminosityToCSV** | `const char *sensor_name, luminosity_t luminosity_data`
 **uvlightToCSV** | `const char *sensor_name, uvlight_t uvlight_data`
+**rgblightToCSV** | `const char *sensor_name, rgblight_t rgblight_data`
 
 Example:
 ```
