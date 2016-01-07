@@ -498,10 +498,9 @@ int32_t _bmp180_compute_b5(int32_t ut)
 /**
  * Initialize the BMP180. Sets ultra high res mode.
  */
-boolean bmp180_init()
+boolean bmp180_init(bmp085_mode_t mode)
 {
   uint8_t res;
-  bmp085_mode_t mode = BMP085_MODE_ULTRAHIGHRES;
 
   Wire.begin();
 
@@ -875,7 +874,6 @@ boolean tsl2561_init() {
   }
 
   return result;
-
 }
 
 float tsl2561_getLux() {
@@ -905,10 +903,13 @@ void isl29125_getRGB(float *red, float *green, float *blue) {
 /*
  * TCS34725 RGB Light Sensor
  */
-Adafruit_TCS34725 tcs34725 = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_700MS, TCS34725_GAIN_1X);
+Adafruit_TCS34725 tcs34725 = Adafruit_TCS34725();
 
-boolean tcs34725_init() {
-  return tcs34725.begin();
+boolean tcs34725_init(tcs34725IntegrationTime_t it, tcs34725Gain_t gain) {
+  boolean init = tcs34725.begin();
+  tcs34725.setIntegrationTime(it);
+  tcs34725.setGain(gain);
+  return init;
 }
 
 void tcs34725_getRGB(float *red, float *green, float *blue) {

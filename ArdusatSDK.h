@@ -12,8 +12,6 @@
 #include <avr/pgmspace.h>
 #include <utility/serial.h>
 
-typedef char PROGMEM prog_char;
-
 extern bool ARDUSAT_SPACEBOARD;
 
 /**
@@ -29,7 +27,7 @@ typedef enum {
 	SENSORID_ML8511	= 0x06,
 	SENSORID_BMP180 = 0x07,
 	SENSORID_ISL29125 = 0x08,
-	SENSORID_TCS34725 = 0x09
+	SENSORID_TCS34725 = 0x09,
 } sensor_id_t;
 
 /**
@@ -130,31 +128,31 @@ const char * unit_to_str(unsigned char);
  * setup and read functions are used to initialize sensors and read data from them.
  */
 //TODO: expand setup functions with options
-boolean beginTemperatureSensor();
+boolean beginTemperatureSensor(void);
 void readTemperature(temperature_t & temp);
 
-boolean beginInfraredTemperatureSensor();
+boolean beginInfraredTemperatureSensor(void);
 void readInfraredTemperature(temperature_t & temp);
 
-boolean beginLuminositySensor();
+boolean beginLuminositySensor(void);
 void readLuminosity(luminosity_t & lum);
 
-boolean beginUVLightSensor();
+boolean beginUVLightSensor(sensor_id_t sensor_id=SENSORID_ML8511);
 void readUVLight(uvlight_t & uv, int pin=DRIVER_ML8511_UV_PIN);
 
-boolean beginAccelerationSensor();
+boolean beginAccelerationSensor(); // ------ Advanced Configuration?
 void readAcceleration(acceleration_t & accel);
 
-boolean beginGyroSensor();
+boolean beginGyroSensor(); // ------ Advanced Configuration?
 void readGyro(gyro_t & orient);
 
-boolean beginMagneticSensor();
+boolean beginMagneticSensor(); // ------ Advanced Configuration?
 void readMagnetic(magnetic_t & mag);
 
-boolean beginRGBLightSensor();
+boolean beginRGBLightSensor(sensor_id_t sensor_id=SENSORID_TCS34725); // ------ Advanced Configuration?
 void readRGBLight(rgblight_t & rgblight);
 
-boolean beginBarometricPressureSensor();
+boolean beginBarometricPressureSensor(bmp085_mode_t mode=BMP085_MODE_ULTRAHIGHRES);
 void readBarometricPressure(pressure_t & pressure);
 
 void calculateOrientation(const acceleration_t & accel, const magnetic_t & mag, orientation_t & orient);

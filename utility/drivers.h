@@ -115,7 +115,7 @@ void lsm303_getRawMag(int16_t *pX, int16_t *pY, int16_t *pZ);
  *
  * http://www.adafruit.com/product/1604
  */
-boolean bmp180_init();
+boolean bmp180_init(bmp085_mode_t mode);
 void bmp180_getRawTemperature(uint16_t *temp);
 void bmp180_getTemperature(float *temp);
 void bmp180_getRawPressure(uint32_t *pressure);
@@ -170,7 +170,7 @@ void isl29125_getRGB(float * red, float * green, float * blue);
  *
  * https://learn.adafruit.com/adafruit-color-sensors
  */
-boolean tcs34725_init();
+boolean tcs34725_init(tcs34725IntegrationTime_t it, tcs34725Gain_t gain);
 void tcs34725_getRGB(float * red, float * green, float * blue);
 
 /**
