@@ -727,12 +727,17 @@ float map_float(float x, float in_min, float in_max, float out_min, float out_ma
  *
  * @return true
  */
+ML8511_ADC ml8511_uv_adc = ML8511_ADC(DRIVER_ML8511_ADDR);
+
 boolean ml8511_init()
 {
-  pinMode(DRIVER_ML8511_UV_PIN, INPUT);
-  pinMode(DRIVER_ML8511_REF_PIN, INPUT);
-
-  return true;
+  if (ARDUSAT_SPACEBOARD) {
+    return ml8511_uv_adc.init();
+  } else {
+    pinMode(DRIVER_ML8511_UV_PIN, INPUT);
+    pinMode(DRIVER_ML8511_REF_PIN, INPUT);
+    return true;
+  }
 }
 
 /**
@@ -747,9 +752,14 @@ boolean ml8511_init()
  */
 float ml8511_getUV(int pin)
 {
-  int uv_v = average_analog_read(pin);
-  int ref_v = average_analog_read(DRIVER_ML8511_REF_PIN);
-  float scaled_uv_v = 3.3 / ref_v * uv_v;
+  float scaled_uv_v;
+  if (ARDUSAT_SPACEBOARD) {
+    scaled_uv_v = ml8511_uv_adc.read_uv();
+  } else {
+    int uv_v = average_analog_read(pin);
+    int ref_v = average_analog_read(DRIVER_ML8511_REF_PIN);
+    scaled_uv_v = 3.3 / ref_v * uv_v;
+  }
   return map_float(scaled_uv_v, 0.99, 2.9, 0.0, 15.0);
 }
 
@@ -824,7 +834,7 @@ float tmp102_getTempCelsius() {
   uint8_t temp_byte;
   float tmp;
 
-  if (ARDUSAT_SHIELD) {
+  if (ARDUSAT_SPACEBOARD) {
     temp_byte = DRIVER_LEMSENS_TMP102_1_ADDR;
   } else {
     temp_byte = DRIVER_TMP102_ADDR;
@@ -848,7 +858,7 @@ TSL2561 *tsl2561;
 boolean tsl2561_init() {
   uint8_t addr;
   if (!tsl2561) {
-    if (ARDUSAT_SHIELD) {
+    if (ARDUSAT_SPACEBOARD) {
       addr = DRIVER_LEMSENS_TSL2561_ADDR;
     } else {
       addr = DRIVER_TSL2561_ADDR;
@@ -927,4 +937,3 @@ float si1132_getUVIndex() {
   UVindex /= 100.0;
   return UVindex;
 }
-

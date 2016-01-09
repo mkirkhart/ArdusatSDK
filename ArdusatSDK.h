@@ -14,7 +14,7 @@
 
 typedef char PROGMEM prog_char;
 
-extern bool ARDUSAT_SHIELD;
+extern bool ARDUSAT_SPACEBOARD;
 
 /**
  * Unique numeric id for each physical sensor

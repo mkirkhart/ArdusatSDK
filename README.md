@@ -26,7 +26,7 @@ The first step to using the SDK is to import it into your sketch. This can be do
 import statement:
 
 ```
-#import <ArdusatSDK.h>
+#include <ArdusatSDK.h>
 ```
 
 After the SDK is imported, the basic I/O functions and sensor drivers should be available.

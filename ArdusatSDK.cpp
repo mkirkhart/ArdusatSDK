@@ -9,7 +9,7 @@
 #include <string.h>
 #include "ArdusatSDK.h"
 
-bool ARDUSAT_SHIELD = false;
+bool ARDUSAT_SPACEBOARD = false;
 int OUTPUT_BUF_SIZE = 256;
 char * _output_buffer;
 static int _output_buf_len = 0;
