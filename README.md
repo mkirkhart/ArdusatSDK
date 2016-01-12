@@ -31,6 +31,23 @@ import statement:
 
 After the SDK is imported, the basic I/O functions and sensor drivers should be available.
 
+### Have one of our new Spaceboard Sensors?
+If you're using one of our new Spaceboards instead of the break out Space Kit, just add
+`ARDUSAT_SPACEBOARD = true;` inside the `setup()` function. It should look something like
+this:
+```
+void setup(void)
+{
+  ARDUSAT_SPACEBOARD = true;
+
+  Serial.begin(9600);
+  if (!beginTemperatureSensor()) {
+    Serial.println("There was a problem initializing the temperature sensor.");
+    while (1);
+  }
+}
+```
+
 ## Initializing Sensors
 
 Sensors in the SDK should be initialized before use. To initialize sensors, a number of `begin`
@@ -45,9 +62,9 @@ Function | Sensor | Config Arguments
 **beginAccelerationSensor** | LSM303 (9DOF breakout) | None
 **beginMagneticSensor** | LSM303 (9DOF breakout) | None
 **beginOrientationSensor** | L3GD20 (9DOF breakout) | None
-**beginUVLightSensor** | ML8511 | None
+**beginUVLightSensor** | ML8511 (Default) or SI1132 | Optional `SENSORID_ML8511` or `SENSORID_SI1132`
 **beginBarometricPressureSensor** | BMP180 | None
-**beginRGBLightSensor** | TCS34725 | None
+**beginRGBLightSensor** | TCS34725 (Default) or ISL29125 | Optional `SENSORID_TCS34725` or `SENSORID_ISL29125`
 
 `begin` functions return `true` on success or `false` on failure.
 
